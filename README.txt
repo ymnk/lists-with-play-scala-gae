@@ -30,5 +30,27 @@ are required to run this app.
   $ vi war/WEB-INF/appengine-web.xml // set your GAE app-id into application tag.
   $ play gae:deploy
 
+
+Notes
+=====
+  * This app is using siena[3] to manipulate the datastore,
+    but it seems models written in Scala can not bee handled by siena
+    unfortunately.  So, models have been written in Java.  
+    Refer to app/models/ directory.
+
+  * The original 'lists-with-gae' has a problem in deleting an item.
+    It seems '/lists/deleteitem/?id=x&itemId=y' has been encoded as
+    '/lists/deleteitem/?id=x&amp;itemId=y' unexpectedly.
+    To work around this problem, a following line has bee added to conf/routes
+
+    POST    /lists/{<\d+>id}/items/{<\d+>itemId}/delete  Lists.deleteItem
+
+  * I don't know the reason, but on my configuration a mail notification 
+    functionality was not worked with original code.
+    So I'm using GAE's mail APIs instead of Play!'s mailer APIs.
+    Refer to app/notifiers/Notifier.scala
+
+
 [1] http://www.playframework.org/modules/gae
 [2] http://github.com/guillaumebort/play-gae/tree/master/samples-and-tests/lists-with-gae/
+[3] http://www.playframework.org/modules/siena
