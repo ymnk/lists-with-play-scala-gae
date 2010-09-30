@@ -1,6 +1,6 @@
 What Is This?
 =============
-This sample app is just a translation of play-gae's lists-with-gae in Scala.
+This sample app is just a translation of play-gae[1]'s lists-with-gae[2] in Scala.
 
 
 How To Try it?
@@ -29,3 +29,6 @@ are required to run this app.
   $ cd lists-with-play-scala-gae
   $ vi war/WEB-INF/appengine-web.xml // set your GAE app-id into application tag.
   $ play gae:deploy
+
+[1] http://www.playframework.org/modules/gae
+[2] http://github.com/guillaumebort/play-gae/tree/master/samples-and-tests/lists-with-gae/
