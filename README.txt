@@ -34,7 +34,7 @@ are required to run this app.
 Notes
 =====
   * This app is using siena[6] to manipulate the datastore.  The original sample
-    app has been using @Filter annotation, but it seems it will case an exception 
+    app has been using @Filter annotation, but it seems it will cause an exception 
     on Scala.  So that annotation is not used in this app.
     Refer to app/models/List.scala.
 
