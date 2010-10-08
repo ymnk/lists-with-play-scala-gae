@@ -33,10 +33,10 @@ are required to run this app.
 
 Notes
 =====
-  * This app is using siena[3] to manipulate the datastore,
-    but it seems models written in Scala can not bee handled by siena
-    unfortunately.  So, models have been written in Java.  
-    Refer to app/models/ directory.
+  * This app is using siena[6] to manipulate the datastore.  The original sample
+    app has been using @Filter annotation, but it seems it will case an exception 
+    on Scala.  So that annotation is not used in this app.
+    Refer to app/models/List.scala.
 
   * The original 'lists-with-gae' has a problem in deleting an item.
     It seems '/lists/deleteitem/?id=x&itemId=y' has been encoded as

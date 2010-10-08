@@ -2,7 +2,7 @@ package models
 
 import siena._
 import java.lang.{Long => JLong}
-/*
+
 class Item extends Model {
 
   @Id
@@ -26,7 +26,6 @@ class Item extends Model {
 
   override def toString() = label
 }
-*/
 
 object ItemOp {
   def all = Model.all(classOf[Item])
