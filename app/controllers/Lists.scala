@@ -21,20 +21,19 @@ object Lists extends Controller {
     
   def index() = {
     val lists = ListOp.findByUser(getUser())
-    render(lists)
+    Template(lists)
   }
     
   def show(id: JLong) = {
-    val list = ListOp.findById(id)
-    notFoundIfNull(list)
+    val list = Option(ListOp.findById(id)).getOrNotFound
     checkOwner(list)
     val items = list.items()
     val oldItems = list.oldItems()
-    render(list, items, oldItems)
+    Template(list, items, oldItems)
   }
     
   def blank() = {
-    render()
+    Template()
   }
     
   def create(name: String) = {
@@ -47,8 +46,7 @@ object Lists extends Controller {
   }
     
   def delete(id: JLong) = {
-    val list = ListOp.findById(id)
-    notFoundIfNull(list)
+    val list = Option(ListOp.findById(id)).getOrNotFound
     checkOwner(list)
     list.delete()
     flash.success("The list %s has been deleted", list)
@@ -56,10 +54,9 @@ object Lists extends Controller {
   }
     
   def edit(id: JLong) = {
-    val list = ListOp.findById(id)
-    notFoundIfNull(list)
+    val list = Option(ListOp.findById(id)).getOrNotFound
     checkOwner(list)
-    render(list)
+    Template(list)
   }
     
   def save(id: JLong, name: String, notes: String) = {
@@ -68,8 +65,7 @@ object Lists extends Controller {
       flash.error("Oops, please give a name to your list")
       edit(id)
     }
-    val list = ListOp.findById(id)
-    notFoundIfNull(list)
+    val list = Option(ListOp.findById(id)).getOrNotFound
     checkOwner(list)
     list.name = name
     list.notes = notes
@@ -78,8 +74,7 @@ object Lists extends Controller {
   }
     
   def addItem(id: JLong, label: String) = {
-    val list = ListOp.findById(id)
-    notFoundIfNull(list);
+    val list = Option(ListOp.findById(id)).getOrNotFound
     checkOwner(list);
     new Item(list, label).insert()
     list.update()
@@ -87,28 +82,25 @@ object Lists extends Controller {
   }
     
   def changeItemState(id: JLong, itemId: JLong, done: Boolean) = {
-    val item = ItemOp.findById(itemId)
-    notFoundIfNull(item)
+    val item = Option(ItemOp.findById(itemId)).getOrNotFound
     checkOwner(item)
     item.done = done
     item.list.nextPosition += 1
     item.position = item.list.nextPosition
     item.update()
     item.list.update()
-    ok()
+    Ok
   }
     
   def deleteItem(id: JLong, itemId: JLong) = {
-    val item = ItemOp.findById(itemId)
-    notFoundIfNull(item)
+    val item = Option(ItemOp.findById(itemId)).getOrNotFound
     checkOwner(item)
     item.delete()
-    ok()
+    Ok
   }
     
   def reorderItems(id: JLong, newOrder: String) = {
-    val list = ListOp.findById(id)
-    notFoundIfNull(list)
+    val list = Option(ListOp.findById(id)).getOrNotFound
     checkOwner(list)
     list.nextPosition = 0;
     for(p <-  newOrder.split(",")) {
@@ -120,12 +112,11 @@ object Lists extends Controller {
       }
     }
     list.update()
-    ok()
+    Ok
   }
     
   def email(id: JLong) = {
-    val list = ListOp.findById(id)
-    notFoundIfNull(list)
+    val list = Option(ListOp.findById(id)).getOrNotFound
     checkOwner(list)
     Notifier.emailList(list)
     flash.success("This list has been emailed to %s", list.user)
@@ -138,7 +129,7 @@ object Lists extends Controller {
     
   private def checkOwner(list: List): Unit  = {
     if(!getUser().equals(list.user)) {
-      forbidden()
+      Forbidden
     }
   }
     
